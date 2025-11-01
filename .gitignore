@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# VS Code
+.vscode/
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.pot
+*.pyc
+
+# Byte-compiled
+*.so
+*.egg
+*.egg-info/
+
+# Cache
+.cache/
+pytest_cache/
+
+# Build & dist
+build/
+dist/
+
+# FastAPI
+*.sqlite3
