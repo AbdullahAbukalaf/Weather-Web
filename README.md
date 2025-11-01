@@ -1,37 +1,40 @@
-Weather Web (FastAPI)
+<h1 align="center">🌤️ Weather Web (FastAPI)</h1>
 
-A simple, fast Python web app that fetches current weather and a daily forecast (1–16 days) using the free Open-Meteo APIs—no API key required.
-Built with FastAPI, Jinja2 templates, Bootstrap 5 UI, and httpx for HTTP calls.
+<p align="center">
+A fast, modern Python web app that fetches <b>current weather</b> and a <b>daily forecast (1–16 days)</b> using the free <a href="https://open-meteo.com/">Open-Meteo APIs</a> — no API key required.<br>
+Built with <b>FastAPI</b>, <b>Jinja2</b>, <b>Bootstrap 5</b>, and <b>httpx</b>.
+</p>
 
-✨ Features
+---
 
-Search by city (geocoded via Open-Meteo Geocoding API)
+## ✨ Features
 
-Current conditions (temp, humidity, wind) + human-readable weather code → text + emoji
+* 🔍 **Search by city** (geocoded via Open-Meteo Geocoding API)
+* 🌡️ **Current conditions** (temperature, humidity, wind) + readable weather code → *text + emoji*
+* 📅 **Daily forecast table** (min/max temperature, precipitation)
+* ⚙️ **Choose Units** — metric (°C, m/s) or imperial (°F, mph)
+* 📆 **Choose Days** — 1 to 16
+* 🎨 **Responsive Bootstrap UI** with dark / light theme
+* 💾 Public **JSON API** endpoint:
+  `GET /api/weather?city=<name>&days=7&units=metric`
 
-Daily forecast table (min/max temperature, precipitation)
+---
 
-Choose Units (metric °C/m/s or imperial °F/mph)
+## 🧱 Tech Stack
 
-Choose Days (1–16)
+| Layer       | Tool                    | Purpose                    |
+| ----------- | ----------------------- | -------------------------- |
+| Backend     | **FastAPI**             | Web framework & routing    |
+| Templates   | **Jinja2**              | Server-side HTML rendering |
+| HTTP Client | **httpx**               | Async API requests         |
+| UI          | **Bootstrap 5 + Icons** | Styling & responsiveness   |
+| Data        | **Open-Meteo**          | Geocoding + Weather data   |
 
-Server-rendered UI with Bootstrap (dark/light ready)
+---
 
-Public JSON endpoint: GET /api/weather?city=…
+## 📁 Project Structure
 
-🧱 Tech Stack
-
-FastAPI — web framework & routing
-
-Jinja2 — HTML templating
-
-httpx — async HTTP client
-
-Bootstrap 5 + Bootstrap Icons — styling
-
-Open-Meteo — geocoding + weather data (no key)
-
-📁 Project Structure
+```
 weather-web/
 ├─ app.py                     # FastAPI app & routes (HTML + JSON)
 ├─ utilities.py               # API helpers + WMO code mapping
@@ -39,139 +42,173 @@ weather-web/
 │  └─ index.html              # Main page (Bootstrap UI)
 ├─ static/
 │  ├─ css/
-│  │  └─ styles.css           # (optional) your custom styles
+│  │  └─ styles.css           # optional custom styles
 │  └─ js/
-│     └─ main.js              # (optional) UI scripts
+│     └─ main.js              # optional UI scripts
 └─ README.md
+```
 
-🚀 Quick Start
-1) Create a virtual environment
+---
 
-Windows (PowerShell)
+## 🚀 Quick Start
 
+### 1️⃣ Create a virtual environment
+
+**Windows (PowerShell)**
+
+```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
+```
 
+> If blocked:
+> `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
 
-If you get a policy error:
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+**macOS / Linux**
 
-macOS/Linux
-
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
 
-2) Install dependencies
+---
+
+### 2️⃣ Install dependencies
+
+```bash
 pip install fastapi uvicorn[standard] httpx jinja2
+```
 
-3) Run the app
+---
+
+### 3️⃣ Run the app
+
+```bash
 uvicorn app:app --reload
+```
 
+Then open 👉 **[http://127.0.0.1:8000](http://127.0.0.1:8000)**
 
-Open your browser: http://127.0.0.1:8000
+---
 
-🖥️ Usage
-Web UI
+## 🖥️ Usage
 
-Enter a city (e.g., Amman, London, Tokyo).
+### 🌐 Web UI
 
-Choose Units (metric/imperial) and Days (1–16).
+1. Enter a **city** (e.g. Amman, London, Tokyo).
+2. Choose **Units** (metric / imperial) and **Days** (1–16).
+3. Click **Search** to view current and forecast data.
 
-Click Search to see current + forecast.
+### ⚡ JSON API
 
-JSON API
+Public endpoint (no API key):
 
-Public endpoint your frontend/scripts can call:
-
+```
 GET /api/weather?city=<name>&days=7&units=metric
+```
 
+#### Query parameters
 
-Query parameters
+| Name    | Type   | Default  | Description                   |
+| ------- | ------ | -------- | ----------------------------- |
+| `city`  | string | required | City name (e.g. Amman)        |
+| `days`  | int    | 7        | Forecast length (1–16)        |
+| `units` | string | metric   | Either `metric` or `imperial` |
 
-city (required, str) — city name (e.g., Amman)
+#### Example
 
-days (optional, int) — 1–16 (default: 7)
-
-units (optional, str) — metric or imperial (default: metric)
-
-Example
-
+```bash
 curl "http://127.0.0.1:8000/api/weather?city=Amman&days=3&units=metric"
+```
 
+#### Sample JSON response (trimmed)
 
-Sample response (truncated)
-
+```json
 {
   "city": "Amman",
-  "coords": { "name": "Amman", "country_code": "JO", "latitude": 31.95522, "longitude": 35.94503 },
+  "coords": { "name": "Amman", "country_code": "JO", "latitude": 31.9552, "longitude": 35.9450 },
   "units": "metric",
   "days": 3,
   "current": {
     "temp": 27.0,
     "humidity": 20,
     "wind": 2.6,
-    "code": 0,
     "text": "Clear sky",
     "emoji": "☀️"
   },
   "daily": {
-    "dates": ["2025-11-01", "2025-11-02", "2025-11-03"],
-    "tmin":  [17.5, 18.6, 18.8],
-    "tmax":  [27.5, 28.4, 28.9],
-    "prec":  [0.0, 0.0, 0.0],
-    "code":  [0, 3, 2],
-    "text":  ["Clear sky", "Overcast", "Partly cloudy"],
-    "emoji": ["☀️", "☁️", "⛅"]
+    "dates": ["2025-11-01","2025-11-02","2025-11-03"],
+    "tmin": [17.5,18.6,18.8],
+    "tmax": [27.5,28.4,28.9],
+    "prec": [0.0,0.0,0.0],
+    "text": ["Clear sky","Overcast","Partly cloudy"],
+    "emoji": ["☀️","☁️","⛅"]
   }
 }
+```
 
-🔧 How it Works (High Level)
+---
 
-Geocoding (utilities.get_city_coordinates)
-Calls:
-https://geocoding-api.open-meteo.com/v1/search?name={city}&count=1&language=en&format=json
-→ returns latitude & longitude for the city.
+## 🔧 How It Works
 
-Weather (utilities.get_weather)
-Calls:
-https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current=...&daily=...&forecast_days={days}&temperature_unit=...&wind_speed_unit=...
-→ returns current conditions + daily arrays.
+1. **Geocoding** → `utilities.get_city_coordinates()`
+   Calls Open-Meteo Geocoding API to get `latitude` and `longitude`.
+2. **Weather** → `utilities.get_weather()`
+   Requests Open-Meteo Forecast API for current + daily data.
+3. **Mapping** → `utilities.wmo_to_text_emoji()`
+   Converts numeric `weather_code` to friendly text + emoji.
+4. **Rendering** → `app.py` + Jinja2 template
+   Combines everything into an elegant Bootstrap dashboard.
 
-WMO mapping (utilities.wmo_to_text_emoji)
-Convert Open-Meteo weather_code numbers → readable text + emoji for better UX.
+---
 
-Rendering (app.py → Jinja2)
-The /search route collects data and passes a clean context into templates/index.html.
+## ⚙️ Configuration
 
-⚙️ Configuration Notes
+| Setting  | Default    | Range / Notes               |
+| -------- | ---------- | --------------------------- |
+| `days`   | `7`        | `1–16`                      |
+| `units`  | `"metric"` | `"metric"` or `"imperial"`  |
+| API Keys | ❌ none     | Open-Meteo is free & public |
 
-No API keys needed (Open-Meteo is free & public).
+---
 
-Defaults: units=metric, days=7.
+## 🧪 Developer Tips
 
-Valid ranges enforced in FastAPI route:
+* Auto-reload is active with `--reload`.
+* Docs UI → [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+* If VS Code shows `Import \"fastapi\" could not be resolved`:
+  Press **Ctrl + Shift + P → “Python: Select Interpreter” →** pick `.venv`.
 
-days: int = Query(7, ge=1, le=16)
+---
 
-units: str = Query("metric", pattern="^(metric|imperial)$")
+## 🐛 Troubleshooting
 
-🧪 Dev Tips
+| Issue                          | Fix                                                   |
+| ------------------------------ | ----------------------------------------------------- |
+| `ModuleNotFoundError: fastapi` | Activate venv and reinstall: `pip install fastapi`    |
+| PowerShell blocks activation   | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
+| “City not found”               | Check spelling or API outage                          |
+| API timeout                    | Open-Meteo may be temporarily unreachable             |
 
-Auto-reload is enabled with --reload (saves re-run automatically).
+---
 
-Interactive docs at: http://127.0.0.1:8000/docs
+## 🗺️ Roadmap
 
-If VS Code shows “Import ‘fastapi’ could not be resolved”:
+* ✅ WMO code → emoji mapping
+* 🕓 Hourly forecast view
+* 💾 Caching (API responses)
+* 🌍 Arabic interface ( RTL )
+* 📦 Dockerfile / Cloud deploy
 
-Press Ctrl+Shift+P → Python: Select Interpreter → pick the one with .venv.
+---
 
-🐛 Troubleshooting
+## 📜 License
 
-ModuleNotFoundError: fastapi → ensure venv is active and pip show fastapi shows it installed inside .venv.
+MIT — free for personal and commercial use.
 
-PowerShell cannot activate venv → run:
+---
 
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-
-
-API errors → Open-Meteo may be temporarily unavailable. The app returns friendly messages for geocoding/weather failures.
+<p align="center">
+  <b>Developed with ❤️ by <a href="https://github.com/AbdullahAbukalaf">Abdullah Abukalaf</a></b><br>
+  <sub>Built for learning and real-world FastAPI practice.</sub>
+</p>
